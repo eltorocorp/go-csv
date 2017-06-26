@@ -9,9 +9,10 @@ package dialect
 import (
 	"errors"
 	"flag"
-	csv "github.com/JensRantil/go-csv"
 	"strings"
 	"unicode/utf8"
+
+	csv "github.com/bcmcmill/go-csv"
 )
 
 type DialectBuilder struct {

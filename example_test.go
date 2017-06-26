@@ -3,7 +3,8 @@ package csv_test
 import (
 	"bytes"
 	"fmt"
-	"github.com/JensRantil/go-csv"
+
+	"github.com/bcmcmill/go-csv"
 )
 
 func Example_readingWriting() {

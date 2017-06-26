@@ -51,6 +51,34 @@ Here's a basic reading example::
       handleFields(fields)
     }
 
+
+To automatically detects the CSV delimiter conforming to the specifications outlined on the on the [Wikipedia article][csv]. Looking through many CSV libraries code and discussion on the stackoverflow, finding that their CSV delimiter detection is limited or incomplete or containing many unneeded features. Hoping this can people solve the CSV delimiter detection problem without importing extra overhead.
+
+[csv]: http://en.wikipedia.org/wiki/Comma-separated_values
+
+## Usage
+
+    package main
+    
+    import (
+    	"github.com/bcmcmill/go-csv/detector"
+    	"os"
+    	"fmt"
+    )
+    
+    func main()  {
+    	detector := detector.New()
+    
+    	file, err := os.OpenFile("example.csv", os.O_RDONLY, os.ModePerm)
+    	if err != nil {
+    		os.Exit(1)
+    	}
+    	defer file.Close()
+    
+    	delimiters := detector.DetectDelimiter(file, '"')
+    	fmt.Println(delimiters)
+    }
+
 CSV dialects
 ------------
 To modify CSV dialect, have a look at `csv.Dialect`,
