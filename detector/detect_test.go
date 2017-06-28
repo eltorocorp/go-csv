@@ -67,6 +67,18 @@ func TestDetectDelimiter(t *testing.T) {
 	assert.Equal(t, []string{",", " "}, delimiters)
 }
 
+func TestDetectRowTerminator(t *testing.T) {
+	detector := New()
+
+	file, err := os.OpenFile("./Fixtures/test1.csv", os.O_RDONLY, os.ModePerm)
+	assert.NoError(t, err)
+	defer file.Close()
+
+	terminator := detector.DetectRowTerminator(file)
+	fmt.Println(terminator)
+	assert.Equal(t, "\n", terminator)
+}
+
 func TestDetectorSample(t *testing.T) {
 	detector := New().(*detector)
 
