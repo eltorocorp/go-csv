@@ -32,9 +32,9 @@ type detector struct {
 // DetectDelimiter finds a slice of delimiter string.
 func (d *detector) DetectDelimiter(reader io.Reader, enclosure byte) []string {
 	statistics, totalLines := d.sample(reader, sampleLines, enclosure)
-
 	var candidates []string
-	for _, delimiter := range d.analyze(statistics, totalLines) {
+	// totalLines - 1, in case there is a new line at the end of the file.
+	for _, delimiter := range d.analyze(statistics, totalLines-1) {
 		candidates = append(candidates, string(delimiter))
 	}
 
