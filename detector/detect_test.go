@@ -5,8 +5,6 @@ import (
 	"regexp"
 	"testing"
 
-	"fmt"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,7 +61,6 @@ func TestDetectDelimiter(t *testing.T) {
 	defer file.Close()
 
 	delimiters := detector.DetectDelimiter(file, '"')
-	fmt.Println(delimiters)
 	assert.Equal(t, []string{",", " "}, delimiters)
 }
 
@@ -75,7 +72,6 @@ func TestDetectRowTerminator(t *testing.T) {
 	defer file.Close()
 
 	terminator := detector.DetectRowTerminator(file)
-	fmt.Println(terminator)
 	assert.Equal(t, "\n", terminator)
 }
 
