@@ -53,13 +53,26 @@ func (d *detector) DetectRowTerminator(reader io.Reader) string {
 	return "\n"
 }
 
+// validDelimiter tests a byte to verify it is one of the possible valid delimiters.
+func validDelimiter(char byte) bool {
+	var possibleDelimiters = []byte{',', '|', '\t', ';'}
+	for _, delimiter := range possibleDelimiters {
+		if char == delimiter {
+			return true
+		}
+	}
+	return false
+}
+
 // DetectDelimiter finds a slice of delimiter string.
 func (d *detector) DetectDelimiter(reader io.Reader, enclosure byte) []string {
 	statistics, totalLines := d.sample(reader, sampleLines, enclosure)
 	var candidates []string
 	// totalLines - 1, in case there is a new line at the end of the file.
 	for _, delimiter := range d.analyze(statistics, totalLines-1) {
-		candidates = append(candidates, string(delimiter))
+		if validDelimiter(delimiter) {
+			candidates = append(candidates, string(delimiter))
+		}
 	}
 
 	return candidates
@@ -126,10 +139,10 @@ func (d *detector) sample(reader io.Reader, sampleLines int, enclosure byte) (fr
 }
 
 // analyze is built based on such an observation: the delimiter must appears
-// the same times at each line, usually, it appears more than once. Therefore
-// for each delimiter candidate, the deviation of its frequency at each line
-// is calculated, if the deviation is 0, it means it appears the same times at
-// each sampled line.
+// the same number of times at each line, usually, it appears more than once.
+// Therefore for each delimiter candidate, the deviation of its frequency at
+// each line is calculated, if the deviation is 0, it means it appears the same
+// times at each sampled line.
 func (d *detector) analyze(ft frequencyTable, sampleLine int) []byte {
 	mean := func(frequencyOfLine map[int]int, size int) float32 {
 		total := 0
@@ -178,16 +191,16 @@ func createFrequencyTable() frequencyTable {
 }
 
 // increment the frequency for ch at line.
-func (f frequencyTable) increment(ch byte, line int) frequencyTable {
-	if _, ok := f[ch]; !ok {
-		f[ch] = make(map[int]int)
+func (f frequencyTable) increment(char byte, line int) frequencyTable {
+	if _, ok := f[char]; !ok {
+		f[char] = make(map[int]int)
 	}
 
-	if _, ok := f[ch][line]; !ok {
-		f[ch][line] = 0
+	if _, ok := f[char][line]; !ok {
+		f[char][line] = 0
 	}
 
-	f[ch][line]++
+	f[char][line]++
 
 	return f
 }

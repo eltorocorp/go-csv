@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"testing"
 
+	"fmt"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -53,7 +55,7 @@ func TestFrequencyTable(t *testing.T) {
 	assert.Equal(t, 2, ft['|'][3])
 }
 
-func TestDetectDelimiter(t *testing.T) {
+func TestDetectDelimiter1(t *testing.T) {
 	detector := New()
 
 	file, err := os.OpenFile("./Fixtures/test1.csv", os.O_RDONLY, os.ModePerm)
@@ -61,7 +63,20 @@ func TestDetectDelimiter(t *testing.T) {
 	defer file.Close()
 
 	delimiters := detector.DetectDelimiter(file, '"')
-	assert.Equal(t, []string{",", " "}, delimiters)
+	fmt.Println(delimiters)
+	assert.Equal(t, []string{","}, delimiters)
+}
+
+func TestDetectDelimiter2(t *testing.T) {
+	detector := New()
+
+	file, err := os.OpenFile("./Fixtures/test2.csv", os.O_RDONLY, os.ModePerm)
+	assert.NoError(t, err)
+	defer file.Close()
+
+	delimiters := detector.DetectDelimiter(file, '"')
+	fmt.Println(delimiters)
+	assert.Equal(t, []string{","}, delimiters)
 }
 
 func TestDetectRowTerminator(t *testing.T) {
