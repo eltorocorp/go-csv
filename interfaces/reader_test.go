@@ -8,7 +8,7 @@ import (
 	oldcsv "encoding/csv"
 	"testing"
 
-	thiscsv "github.com/bcmcmill/go-csv"
+	thiscsv "github.com/eltorocorp/go-csv"
 )
 
 func TestReaderInterface(t *testing.T) {

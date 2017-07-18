@@ -61,7 +61,7 @@ To automatically detects the CSV delimiter conforming to the specifications outl
     package main
     
     import (
-    	"github.com/bcmcmill/go-csv/detector"
+    	"github.com/eltorocorp/go-csv/detector"
     	"os"
     	"fmt"
     )

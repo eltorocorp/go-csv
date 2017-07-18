@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/bcmcmill/go-csv"
+	"github.com/eltorocorp/go-csv"
 )
 
 func Example_readingWriting() {
