@@ -33,5 +33,8 @@ func main() {
 	rInUTF8 := transform.NewReader(strings.NewReader(encS), french.ShiftJIS.NewEncoder())
 	
 	// decode the string 
+	decBytes, _ := ioutil.ReadAll(rInUTF8)
+	decS := string(decBytes)
+	fmt.Println(decs)
 	
 }
