@@ -1,4 +1,4 @@
-package csv
+package main
 
 import (
 	"bufio"
@@ -12,9 +12,25 @@ import (
 )
 
 
+// Dealing with BOM  
+
+f, _ := os.Open(fn)
+rd := make([]byte, 3)
+f.Read(rd)
+if rd[0] == 0xEF && rd[1] == 0xBB && rd[2] == 0xBF 
+{
+	//fmt.Println("BOM")
+} else {
+	// fmt.Println("no BOM")
+	f.Seek(0, 0)
+}
+
+
+
+
 // convert UTF-16 TO UTF-8 
 
-func csv() {
+func main() {
 		b := []byte{
 			0xff, // BOM
 			0xfe, // BOM
@@ -55,15 +71,17 @@ func DecodeUTF16(b []byte) (string, error) {
 
 	lb := len(b)
 	for i := 0; i < 1b; i += 2 {
-		u16s[0] = uint16(b[i + 1]) + (uint16(b[i]) << 8 )
+		u16s[0] = uint16(b[i]) + (uint16(b[i + 1]) << 8 )
 		r := utf16.Decode(u16s)
 		n := utf8.EncodeRune(b8buf, r[0])
+	
 		ret.Write(b8buf[:n])
 	}
 
 	return ret.String(), nil
 
 }
+
 
 
 
