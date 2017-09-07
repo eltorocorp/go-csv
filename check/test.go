@@ -27,5 +27,11 @@ func main() {
 	wINUTF8.Close()
 	fmt.Println(encS)
 
+	// Decoding: convert encs from Shiftjis to UTF8 
+	// declare a decoder which reads from the string we have just encoded 
+
+	rInUTF8 := transform.NewReader(strings.NewReader(encS), french.ShiftJIS.NewEncoder())
+	
+	// decode the string 
 	
 }
