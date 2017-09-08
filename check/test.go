@@ -1,40 +1,28 @@
 package main 
 
 import (
-	"bytes"
-	"fmt"
+	"log"
+	
 	"io/ioutil"
-	"strings"
-	"golang.org/x/text/encoding/french"
-	"golang.org/x/text/transform"
+	
+	"unicode/utf8"
 )
 
-func main() {
-	//string to be transformed 
-	s := "voiture"
-	fmt.Println(s)
+// read the file 
 
-
-	// Encoding: convert s from UTF-8 to ShiftJIS 
-	// declare a bytes.BUffer b and an encoder which will write into the buffer 
-	
-	var b bytes.Buffer 
-	wINUTF8 := transform.NewWriter(&b, french.ShiftJIS.NewEncoder())
-
-	//encode the string 
-
-	wINUTF8.Write([]byte(s))
-	wINUTF8.Close()
-	fmt.Println(encS)
-
-	// Decoding: convert encs from Shiftjis to UTF8 
-	// declare a decoder which reads from the string we have just encoded 
-
-	rInUTF8 := transform.NewReader(strings.NewReader(encS), french.ShiftJIS.NewEncoder())
-	
-	// decode the string 
-	decBytes, _ := ioutil.ReadAll(rInUTF8)
-	decS := string(decBytes)
-	fmt.Println(decs)
-	
+buf, err := ioutil.ReadAll("test3.csv")
+if error != nil {
+	log.Fatal(err)
 }
+
+size := 0
+for start := 0; start < len(buf); start += size {
+	var r rune 
+	if r, size = utf8.DecodeRune(buf[start:]); r == utf8.RuneError {
+		log.Fatalf("invalid utf8 encoding at ofs %d", start)
+	}
+}
+
+
+
+
