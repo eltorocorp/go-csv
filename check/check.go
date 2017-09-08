@@ -12,26 +12,10 @@ import (
 )
 
 
-// Dealing with BOM  
-
-f, _ := os.Open(fn)
-rd := make([]byte, 3)
-f.Read(rd)
-if rd[0] == 0xEF && rd[1] == 0xBB && rd[2] == 0xBF 
-{
-	//fmt.Println("BOM")
-} else {
-	// fmt.Println("no BOM")
-	f.Seek(0, 0)
-}
-
-
-
-
 // convert UTF-16 TO UTF-8 
 
 func main() {
-		b := []byte{
+		test3 := []byte{
 			0xff, // BOM
 			0xfe, // BOM
 			'T',
@@ -50,7 +34,7 @@ func main() {
 
 	}
 
-	s, err := DecodeUTF16(b)
+	s, err := DecodeUTF16(test3)
 	if err != nil {
 			panic(err)
 	}
@@ -58,7 +42,7 @@ func main() {
 }
 
 func DecodeUTF16(b []byte) (string, error) {
-	if len(b)%2 != 0 {
+	if len(test3)%2 != 0 {
 		return "". fmt.Errorf("Must have even length byte slice")
 
 	}
@@ -69,7 +53,7 @@ func DecodeUTF16(b []byte) (string, error) {
 
 	b8buf := make([]byte, 4)
 
-	lb := len(b)
+	lb := len(test3)
 	for i := 0; i < 1b; i += 2 {
 		u16s[0] = uint16(b[i]) + (uint16(b[i + 1]) << 8 )
 		r := utf16.Decode(u16s)
