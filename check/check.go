@@ -5,11 +5,39 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 	"unicode/utf8"
 	"unicode/utf16"
 	"bytes"
 )
+
+
+
+// inteface for reader and writer 
+
+type file interface {
+	Read()
+	Write()
+	Convert() 
+}
+
+
+type CSV struct {
+
+}
+
+func (c CSV) Read() {
+
+}
+
+func (c CSV) Convert() {
+	return ""
+
+}
+
+func (c CSV) Write() {
+	return 
+}
+
 
 
 // convert UTF-16 TO UTF-8 
