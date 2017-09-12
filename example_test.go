@@ -2,9 +2,9 @@ package csv_test
 
 import (
 	"bytes"
-	"fmt"
+	"encoding/csv"
 
-	"github.com/eltorocorp/go-csv"
+	"fmt"
 )
 
 func Example_readingWriting() {
