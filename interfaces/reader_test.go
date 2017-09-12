@@ -5,7 +5,9 @@ package interfaces
 
 import (
 	"bytes"
-	oldcsv "encoding/csv"
+
+	oldcsv "github.com/eltorocorp/go-csv"
+
 	"testing"
 
 	thiscsv "github.com/eltorocorp/go-csv"
