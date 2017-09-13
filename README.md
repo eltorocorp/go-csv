@@ -1,5 +1,6 @@
 CSV
 ===
+ [![GoDoc](https://godoc.org/github.com/eltorocorp/go-csv?status.svg)](https://godoc.org/github.com/eltorocorp/go-csv)
 
 A Go [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) implementation
 inspired by [Python's CSV module](https://docs.python.org/2/library/csv.html).
@@ -103,7 +104,6 @@ Documentation
 -------------
 Package documentation can be found
 [here](http://godoc.org/github.com/eltorocorp/go-csv)
-
 
 Contributions
 -------------
