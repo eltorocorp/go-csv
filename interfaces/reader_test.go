@@ -6,20 +6,20 @@ package interfaces
 import (
 	"bytes"
 
-	oldcsv "github.com/eltorocorp/go-csv"
+	"github.com/eltorocorp/go-csv"
 
 	"testing"
 
-	thiscsv "github.com/eltorocorp/go-csv"
+	
 )
 
 func TestReaderInterface(t *testing.T) {
 	t.Parallel()
 
 	var iface Reader
-	iface = thiscsv.NewReader(new(bytes.Buffer))
-	iface = thiscsv.NewDialectReader(new(bytes.Buffer), thiscsv.Dialect{})
-	iface = oldcsv.NewReader(new(bytes.Buffer))
+	iface = csv.NewReader(new(bytes.Buffer))
+	iface = csv.NewDialectReader(new(bytes.Buffer), csv.Dialect{})
+	iface = csv.NewReader(new(bytes.Buffer))
 
 	// To get rid of compile-time warning that this variable is not used.
 	iface.Read()
