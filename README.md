@@ -103,7 +103,7 @@ the module behave the same as the `csv` module in the Go standard library).
 Documentation
 -------------
 Package documentation can be found
-[here](http://godoc.org/github.com/JensRantil/go-csv)
+[here](http://godoc.org/github.com/eltorocorp/go-csv)
 
 
 
@@ -112,4 +112,4 @@ Contributions
 
  github.com/bcmcmil/go-csv
 
- 
+
