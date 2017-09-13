@@ -1,6 +1,6 @@
 CSV
 ===
-[![Build Status](https://secure.travis-ci.org/JensRantil/go-csv.png?branch=master)](http://travis-ci.org/JensRantil/go-csv) [![Go Report Card](https://goreportcard.com/badge/github.com/JensRantil/go-csv)](https://goreportcard.com/report/github.com/JensRantil/go-csv) [![GoDoc](https://godoc.org/github.com/JensRantil/go-csv?status.svg)](https://godoc.org/github.com/JensRantil/go-csv)
+ [![GoDoc](https://godoc.org/github.com/eltorocorp/go-csv?status.svg)](https://godoc.org/github.com/eltorocorp/go-csv)
 
 A Go [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) implementation
 inspired by [Python's CSV module](https://docs.python.org/2/library/csv.html).
@@ -103,17 +103,11 @@ the module behave the same as the `csv` module in the Go standard library).
 Documentation
 -------------
 Package documentation can be found
-[here](http://godoc.org/github.com/JensRantil/go-csv).
+[here](http://godoc.org/github.com/eltorocorp/go-csv)
 
-Why was this developed?
------------------------
-I needed it for [mysqlcsvdump](https://github.com/JensRantil/mysqlcsvdump) to
-support variations of CSV output. The `csv` module in the Go (1.2) standard
-library was inadequate as it it does not support any CSV dialect modifications
-except changing separator and partially line termination.
+Contributions
+-------------
 
-Who developed this?
--------------------
-I'm Jens Rantil. Have a look at [my
-blog](http://jensrantil.github.io/pages/about-jens.html) for more info on what
-I'm working on.
+ github.com/bcmcmil/go-csv
+
+
