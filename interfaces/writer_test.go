@@ -6,20 +6,22 @@ package interfaces
 import (
 	"bytes"
 
-	oldcsv "github.com/eltorocorp/go-csv"
+	"encoding/csv"
+
+	"github.com/eltorocorp/go-csv"
 
 	"testing"
 
-	thiscsv "github.com/eltorocorp/go-csv"
+	
 )
 
 func TestWriterInterface(t *testing.T) {
 	t.Parallel()
 
 	var iface Writer
-	iface = thiscsv.NewWriter(new(bytes.Buffer))
-	iface = thiscsv.NewDialectWriter(new(bytes.Buffer), thiscsv.Dialect{})
-	iface = oldcsv.NewWriter(new(bytes.Buffer))
+	iface = csv.NewWriter(new(bytes.Buffer))
+	iface = csv.NewDialectWriter(new(bytes.Buffer), csv.Dialect{})
+	iface = csv.NewWriter(new(bytes.Buffer))
 
 	// To get rid of compile-time warning that this variable is not used.
 	iface.Flush()
