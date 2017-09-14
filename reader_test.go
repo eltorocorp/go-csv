@@ -188,3 +188,9 @@ func TestReaderQuick(t *testing.T) {
 	testWriterQuick(t, QuoteMinimal)
 	testWriterQuick(t, QuoteNonNumeric)
 }
+
+// Test for the read() method
+
+func TestRead(t *testing.T) {
+
+}
