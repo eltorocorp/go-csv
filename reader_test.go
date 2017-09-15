@@ -192,5 +192,13 @@ func TestReaderQuick(t *testing.T) {
 // Test for the read() method
 
 func TestRead(t *testing.T) {
+	isFileEncoded := encoded(utf8, utf16, unicode)
+	if !isFileEncoded {
+		t.Error("Expected true", isFileEncoded)
+	} 
 
+}
+
+func encoded(utf8, utf16, unicode) {
+	if 
 }
