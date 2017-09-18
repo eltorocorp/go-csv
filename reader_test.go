@@ -193,7 +193,7 @@ func TestReaderQuick(t *testing.T) {
 // Test fot UTF8 Support
 
 func Test_Read_UTF8_ReturnsFile(t *testing.T) {
-	record := "test4.csv"
+	record := "hello"
 	if record != utf8.ValidString {
 		t.Errorf("file is not encoded")
 	}
