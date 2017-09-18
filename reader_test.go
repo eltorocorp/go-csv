@@ -4,6 +4,7 @@
 package csv
 
 import (
+	"encoding/csv"
 	"bytes"
 	"io"
 	"reflect"
@@ -208,11 +209,13 @@ func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
 
 func Test_Read_UTF8_ReturnsF(t *testing.T) {
 
-	actualResult := ("test4.csv")
-	var UTF8Validator transform.Transformer = UTF8Validator{"test4.csv"}
+	b := new(bytes.Buffer)
+	c = csv.NewWriter("test4.csv")
+	c.WriteAll(record)
 
-	if actualResult != UTF8Validator {
-		t.Fatalf("Expected %s but got %s", UTF8Validator, actualResult)
+	
+
+	
 	}
 
 }
