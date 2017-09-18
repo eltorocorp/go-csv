@@ -270,3 +270,38 @@ func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
 	}
 
 }
+
+func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
+
+	text := "ï»¿"
+
+	bomFound := true
+	for index, value := range text {
+		switch index {
+		case 0:
+			if byte(value) == 0xEF {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+
+		case 1:
+			if byte(value) == 0xBB {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+
+		case 2:
+			if byte(value) == 0xBF {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+		}
+	}
+
+	if bomFound {
+		t.Error("Unexpected output:", bomFound)
+	}
+}
