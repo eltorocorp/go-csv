@@ -10,6 +10,8 @@ import (
 	"testing"
 	"testing/quick"
 	"unicode/utf8"
+
+	"golang.org/x/text/transform"
 )
 
 func TestUnReader(t *testing.T) {
@@ -193,8 +195,8 @@ func TestReaderQuick(t *testing.T) {
 // Test fot UTF8 Support
 
 func Test_Read_UTF8_ReturnsFile(t *testing.T) {
-	record := "hello"
-	if record != utf8.ValidString {
+
+	if record != utf8.ValidString("hello") {
 		t.Errorf("record is not encoded")
 	}
 }
@@ -204,6 +206,13 @@ func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
 	}
 }
 
+func Test_Read_UTF8_ReturnsFile(t *testing.T) {
+
+	actualResult := "test4.csv"
+	var UTF8Validator transform.Transformer = UTF8Validator{"test4.csv"}
+
+	if actualResult != UTF8Validator {
+		t.Fatalf("Expected %s but got %s", UTF8Validator, actualResult)
+	}
 
 }
-
