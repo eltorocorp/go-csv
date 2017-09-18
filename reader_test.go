@@ -206,9 +206,9 @@ func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
 	}
 }
 
-func Test_Read_UTF8_ReturnsFile(t *testing.T) {
+func Test_Read_UTF8_ReturnsF(t *testing.T) {
 
-	actualResult := "test4.csv"
+	actualResult := ("test4.csv")
 	var UTF8Validator transform.Transformer = UTF8Validator{"test4.csv"}
 
 	if actualResult != UTF8Validator {
