@@ -210,10 +210,17 @@ func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
 func Test_Read_UTF8_ReturnsF(t *testing.T) {
 
 	b := new(bytes.Buffer)
-	c = csv.NewWriter("test4.csv")
-	c.WriteAll(record)
+	c = csv.NewWriter(b, "test4.csv")
+	w.WriteAll(record)
 
-	
+	r := NewReader(c)
+	data, err := r.ReadAll()
+	if err != nil {
+		t.Error("can't read file", err)
+		return false
+	}
+
+
 
 	
 	}
