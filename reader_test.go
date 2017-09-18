@@ -229,3 +229,44 @@ func Test_Read_UTF8_Properly_ReadsCharacters(t *testing.T) {
 		t.Error("Unexpected output:", line[2])
 	}
 }
+
+func Test_Read_UTF16_ReadsCharacters(t *testing.T) {
+	text := "楆獲ⱴ慌瑳䄬摤敲, 獳ⰱ摁牤獥㉳䌬瑩ⱹ瑓瑡ⱥ楚Ɒ楚㑰䄊䅄\n" +
+		"ⱍ䕗呓㔬㠱, 䥖䱌䝁⁅噁ⱅ䰬协䄠䝎䱅卅䌬ⱁ〹㄰ⰶ㈵㘰䈊䉏奂䠬䱉ⱌㄳ‱\n"
+
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+
+	r.Read()
+	line, _ := r.Read()
+
+	result := reflect.DeepEqual(line[0], "ⱍ䕗呓㔬㠱")
+
+	if !result {
+		t.Error("Unexpected result:", line[1])
+	}
+}
+
+func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
+	//Test data
+	text := "∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i)\n" +
+		"∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β)\n"
+
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+
+	r.Read()
+
+	line, _ := r.Read()
+
+	result := reflect.DeepEqual(line[1], " α ∧ ¬β = ¬(¬α ∨ β)")
+
+	if !result {
+		t.Error("Unexpected output:", line[1])
+	}
+
+}
