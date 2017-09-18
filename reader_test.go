@@ -4,15 +4,12 @@
 package csv
 
 import (
-	"encoding/csv"
 	"bytes"
 	"io"
 	"reflect"
+	"strings"
 	"testing"
 	"testing/quick"
-	"unicode/utf8"
-
-	"golang.org/x/text/transform"
 )
 
 func TestUnReader(t *testing.T) {
@@ -195,34 +192,40 @@ func TestReaderQuick(t *testing.T) {
 
 // Test fot UTF8 Support
 
-func Test_Read_UTF8_ReturnsFile(t *testing.T) {
-
-	if record != utf8.ValidString("hello") {
-		t.Errorf("record is not encoded")
-	}
-}
-func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
-	if b != utf8.ValidRune {
-		t.Errorf("Not encoded as UTF8")
-	}
-}
-
 func Test_Read_UTF8_ReturnsF(t *testing.T) {
-
-	b := new(bytes.Buffer)
-	c = csv.NewWriter(b, "test4.csv")
-	w.WriteAll(record)
-
-	r := NewReader(c)
-	data, err := r.ReadAll()
-	if err != nil {
-		t.Error("can't read file", err)
-		return false
+	text := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n" +
+		"λόγους, οὓςm ἀκούω·, τοὺς μὲν γὰρ, λόγους περὶ τοῦ\n"
+	b := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+	line, _ := b.Read()
+	result := reflect.DeepEqual(line[0], "Οὐχὶ ταὐτὰ")
+	if !result {
+		t.Error("Unexpected output:", line[0])
 	}
+}
 
-
-
-	
+func Test_Read_UTF8_Properly_ReadsCharacters(t *testing.T) {
+	// Test data.
+	text := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n" +
+		"λόγους, οὓςm ἀκούω·, τοὺς μὲν γὰρ, λόγους περὶ τοῦ\n"
+	// Create reader
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+	// Ignore first two lines.
+	r.Read()
+	r.Read()
+	// Read the third line.
+	line, _ := r.Read()
+	// Check result.
+	result := reflect.DeepEqual(line[2], " τοὺς μὲν γὰρ")
+	// Verify the result is as expected, if not fail.
+	if !result {
+		t.Error("Unexpected output:", line[2])
 	}
-
 }
