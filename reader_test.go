@@ -199,3 +199,10 @@ func Test_Read_UTF8_ReturnsFile(t *testing.T) {
 	}
 	}
 }
+
+
+func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
+	if b != utf8.ValidRune {
+		t.Errorf("Not encoded as UTF8")
+	}
+}
