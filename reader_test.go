@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"testing"
 	"testing/quick"
+	"unicode/utf8"
 )
 
 func TestUnReader(t *testing.T) {
@@ -192,5 +193,9 @@ func TestReaderQuick(t *testing.T) {
 // Test fot UTF8 Support
 
 func Test_Read_UTF8_ReturnsFile(t *testing.T) {
-
+	record := "test4.csv"
+	if record != utf8.ValidString {
+		t.Errorf("file is not encoded")
+	}
+	}
 }
