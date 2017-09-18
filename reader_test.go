@@ -195,7 +195,7 @@ func TestReaderQuick(t *testing.T) {
 func Test_Read_UTF8_ReturnsFile(t *testing.T) {
 	record := "hello"
 	if record != utf8.ValidString {
-		t.Errorf("file is not encoded")
+		t.Errorf("record is not encoded")
 	}
 	}
 }
