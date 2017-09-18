@@ -197,12 +197,13 @@ func Test_Read_UTF8_ReturnsFile(t *testing.T) {
 	if record != utf8.ValidString {
 		t.Errorf("record is not encoded")
 	}
-	}
 }
-
-
 func Test_ReadRune_UTF8_ValidatesRune(t *testing.T) {
 	if b != utf8.ValidRune {
 		t.Errorf("Not encoded as UTF8")
 	}
 }
+
+
+}
+
