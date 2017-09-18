@@ -5,6 +5,7 @@ package csv
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"reflect"
 	"strings"
@@ -275,7 +276,10 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 
 	text := "ï»¿"
 
+	fmt.Println(text)
+
 	bomFound := true
+
 	for index, value := range text {
 		switch index {
 		case 0:
@@ -290,6 +294,7 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 				bomFound = bomFound && true
 			} else {
 				bomFound = bomFound && false
+
 			}
 
 		case 2:
@@ -299,9 +304,11 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 				bomFound = bomFound && false
 			}
 		}
+		fmt.Println(value)
+
 	}
 
-	if bomFound {
+	if !bomFound {
 		t.Error("Unexpected output:", bomFound)
 	}
 }
