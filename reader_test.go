@@ -273,7 +273,7 @@ func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
 }
 
 func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
-	// So the characters are indexed at 0,2 and 4
+	// So the characters are indexed at 0,2 and 4 because Unicode characters can take more than one position
 	text := "ï»¿"
 
 	bomFound := true
