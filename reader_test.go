@@ -276,8 +276,6 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 
 	text := "ï»¿"
 
-	fmt.Println(text)
-
 	bomFound := true
 
 	for index, value := range text {
