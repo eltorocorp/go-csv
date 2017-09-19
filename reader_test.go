@@ -273,12 +273,13 @@ func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
 }
 
 func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
-
+	// So the characters are indexed at 0,2 and 4
 	text := "ï»¿"
 
 	bomFound := true
-
+	fmt.Println(len(text))
 	for index, value := range text {
+		fmt.Println(index)
 		switch index {
 		case 0:
 			if byte(value) == 0xEF {
@@ -287,23 +288,60 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 				bomFound = bomFound && false
 			}
 
-		case 1:
+		case 2:
 			if byte(value) == 0xBB {
+
 				bomFound = bomFound && true
 			} else {
+
 				bomFound = bomFound && false
 
 			}
 
-		case 2:
+		case 4:
 			if byte(value) == 0xBF {
 				bomFound = bomFound && true
 			} else {
 				bomFound = bomFound && false
 			}
 		}
-		fmt.Println(value)
+		fmt.Println(value, byte(value), bomFound)
+		fmt.Printf("%X\n", byte(value))
 
+	}
+
+	if !bomFound {
+		t.Error("Unexpected output:", bomFound)
+	}
+}
+
+func Test_Read_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
+
+	text := "þÿ"
+
+	bomFound := true
+
+	for index, value := range text {
+		switch index {
+		case 0:
+			if byte(value) == 0xFE {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+
+		case 1:
+			if byte(value) == 0xFF {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+
+			}
+
+		}
+
+		fmt.Println(value, byte(value), bomFound)
+		fmt.Printf("%X\n", byte(value))
 	}
 
 	if !bomFound {
