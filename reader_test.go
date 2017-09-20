@@ -368,3 +368,5 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 		t.Error("Unexpected output:", line[0])
 	}
 }
+
+// \xEF\xBB\xBF
