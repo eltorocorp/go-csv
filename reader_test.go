@@ -350,10 +350,9 @@ func Test_Read_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
 }
 
 func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
-	// So the characters are indexed at 0,2 and 4 because Unicode characters can take more than one position
-	text := "ï»¿Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
-		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n" +
-		"λόγους, οὓςm ἀκούω·, τοὺς μὲν γὰρ, λόγους περὶ τοῦ\n"
+	//
+	text := "\xEF\xBB\xBFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
 
 	r := NewDialectReader(strings.NewReader(text), Dialect{
 		Delimiter:      ',',
@@ -362,9 +361,6 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 
 	// Read the first line.
 	line, _ := r.Read()
-
-	runesArray := []rune(text)
-	fmt.Println(string(runesArray[0]))
 
 	result := reflect.DeepEqual(line[0], "Οὐχὶ ταὐτὰ")
 
