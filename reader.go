@@ -162,10 +162,6 @@ func (r *Reader) Read() ([]string, error) {
 
 // Make Reader read bytes and check for BOM
 
-func (r *Reader) read() ([]byte, error) {
-	b1 := make([]byte, 6)
-}
-
 func (r *Reader) readField() (string, error) {
 	char, _, err := r.r.ReadRune()
 	if err != nil {
