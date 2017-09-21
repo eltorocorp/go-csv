@@ -272,7 +272,7 @@ func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
 
 }
 
-func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
+func Test_UnicodeBOM_ReadCharacters(t *testing.T) {
 	// So the characters are indexed at 0,2 and 4 because Unicode characters can take more than one position
 	text := "ï»¿"
 
@@ -315,7 +315,7 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 	}
 }
 
-func Test_Read_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
+func Test_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
 
 	text := "þÿ"
 
