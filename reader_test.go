@@ -4,7 +4,6 @@
 package csv
 
 import (
-	"github.com/stretchr/testify/assert"
 	"bytes"
 	"fmt"
 	"io"
@@ -352,7 +351,7 @@ func Test_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
 
 func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 	//
-	text := "\xEF\xBB\xBFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+	text := "0xEFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
 		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
 
 	r := NewDialectReader(strings.NewReader(text), Dialect{
@@ -360,21 +359,18 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 		LineTerminator: "\n",
 	})
 
-	b := make([]byte, 6)
+	r.readField()
 
-	n, _ := r.Read(b)
+	fmt.Println(r)
 
-	assert.NotEmpty(t, n, "this should not be empty:")
+	line, _ := r.readField()
 
+	result := reflect.DeepEqual(line[0], "\xEF\xBB\xBFΟὐχὶ ταὐτὰ")
 
+	if !result {
+		t.Error("Unexpected output:", line[0])
+	}
 
-	// Read the first line.
-
-	//result := reflect.DeepEqual(line[0], "Οὐχὶ ταὐτὰ")
-
-	//if !result {
-		//t.Error("Unexpected output:", line[0])
-	//}
 }
 
-// \xEF\xBB\xBF
+// \xEF\xBB\
