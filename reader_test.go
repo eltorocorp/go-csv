@@ -353,6 +353,7 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 	//
 	text := "\xEF\xBB\xBFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
 		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
+	fmt.Printf("plain string: ", text)
 
 	r := NewDialectReader(strings.NewReader(text), Dialect{
 		Delimiter:      ',',
