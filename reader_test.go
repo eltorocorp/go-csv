@@ -272,7 +272,7 @@ func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
 
 }
 
-func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
+func Test_UnicodeBOM_ReadCharacters(t *testing.T) {
 	// So the characters are indexed at 0,2 and 4 because Unicode characters can take more than one position
 	text := "ï»¿"
 
@@ -315,7 +315,7 @@ func Test_Read_UnicodeBOM_ReadCharacters(t *testing.T) {
 	}
 }
 
-func Test_Read_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
+func Test_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
 
 	text := "þÿ"
 
@@ -353,7 +353,6 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 	//
 	text := "\xEF\xBB\xBFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
 		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
-	fmt.Printf("plain string: ", text)
 
 	r := NewDialectReader(strings.NewReader(text), Dialect{
 		Delimiter:      ',',
