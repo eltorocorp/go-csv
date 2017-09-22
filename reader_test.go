@@ -351,7 +351,7 @@ func Test_UnicodeBOMUTF16BE_ReadCharacters(t *testing.T) {
 
 func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 	//
-	text := "0xEFΟὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+	text := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
 		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
 
 	r := NewDialectReader(strings.NewReader(text), Dialect{
@@ -359,18 +359,81 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 		LineTerminator: "\n",
 	})
 
-	r.readField()
+	r.Read()
 
-	fmt.Println(r)
+	line, _ := r.Read()
 
-	line, _ := r.readField()
-
-	result := reflect.DeepEqual(line[0], "\xEF\xBB\xBFΟὐχὶ ταὐτὰ")
+	result := reflect.DeepEqual(line[1], "Οὐχὶ ταὐτὰ")
 
 	if !result {
-		t.Error("Unexpected output:", line[0])
+		t.Error("Unexpected output:", line[1])
 	}
 
 }
 
 // \xEF\xBB\
+
+func Test_Read_Unicode(t *testing.T) {
+	s := "ï»¿Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
+
+	runes := []rune(s)
+
+	bomFound := true
+
+	//fmt.Printf("%c", runes[0])
+	//fmt.Printf("%c", runes[1])
+	//fmt.Printf("%c", runes[2])
+	//fmt.Printf("%c", runes[3])
+	//fmt.Printf("%c", runes[4])
+	//fmt.Printf("%c", runes[5])
+	//fmt.Printf("%c", runes[6])
+
+	for index, value := range runes {
+		switch index {
+		case 0:
+			if byte(value) == 0xEF {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+
+		case 1:
+			if byte(value) == 0xBB {
+
+				bomFound = bomFound && true
+			} else {
+
+				bomFound = bomFound && false
+
+			}
+
+		case 2:
+			if byte(value) == 0xBF {
+				bomFound = bomFound && true
+			} else {
+				bomFound = bomFound && false
+			}
+
+		}
+
+		fmt.Println(value, byte(value))
+
+		//r := NewDialectReader(strings.NewReader(s), Dialect{
+		//Delimiter:      ',',
+		//LineTerminator: "\n",
+		//})
+
+		//r.readField()
+
+		//line, _ := r.readField()
+
+		//fmt.Printf(line)
+
+		if !bomFound {
+			t.Error("Unexpected output:", bomFound)
+		}
+
+	}
+
+}
