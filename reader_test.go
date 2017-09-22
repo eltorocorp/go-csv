@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"reflect"
 	"strings"
 	"testing"
@@ -374,12 +375,34 @@ func Test_Read_UnicodeBOM4_ReadCharacters(t *testing.T) {
 // \xEF\xBB\
 
 func Test_Read_Unicode(t *testing.T) {
-	s := "ï»¿Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+	s, err := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
 		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
 
-	runes := []rune(s)
+	bom := [3]byte
 
-	bomFound := true
+	_, err = io.ReadFull(s, bom[:])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if bom[0] != 0xef || bom[1] != 0xbb || bom[2] != 0xbf {
+		_, err = s.seek(0, 0) //not bom seek back to beginning
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	//runes := []rune(s)
+
+	//buf := []byte(s)
+
+	//bomFound := true
+
+	//fmt.Println(utf8.RuneStart(buf[1]))
+	//fmt.Println(utf8.RuneStart(buf[2]))
+	//fmt.Println(utf8.RuneStart(buf[3]))
+	//fmt.Println(utf8.RuneStart(buf[4]))
+	//fmt.Println(utf8.RuneStart(buf[5]))
 
 	//fmt.Printf("%c", runes[0])
 	//fmt.Printf("%c", runes[1])
@@ -389,51 +412,51 @@ func Test_Read_Unicode(t *testing.T) {
 	//fmt.Printf("%c", runes[5])
 	//fmt.Printf("%c", runes[6])
 
-	for index, value := range runes {
-		switch index {
-		case 0:
-			if byte(value) == 0xEF {
-				bomFound = bomFound && true
-			} else {
-				bomFound = bomFound && false
-			}
+	//for index, value := range runes {
+	//switch index {
+	//case 0:
+	//if byte(value) == 0xEF {
+	//bomFound = bomFound && true
+	//} else {
+	//bomFound = bomFound && false
+	//}
 
-		case 1:
-			if byte(value) == 0xBB {
+	//case 1:
+	//if byte(value) == 0xBB {
 
-				bomFound = bomFound && true
-			} else {
+	//bomFound = bomFound && true
+	//} else {
 
-				bomFound = bomFound && false
+	//bomFound = bomFound && false
 
-			}
+	//}
 
-		case 2:
-			if byte(value) == 0xBF {
-				bomFound = bomFound && true
-			} else {
-				bomFound = bomFound && false
-			}
+	//case 2:
+	//if byte(value) == 0xBF {
+	//bomFound = bomFound && true
+	//} else {
+	//bomFound = bomFound && false
+	//}
 
-		}
+	//}
 
-		fmt.Println(value, byte(value))
+	//fmt.Println(value, byte(value))
 
-		//r := NewDialectReader(strings.NewReader(s), Dialect{
-		//Delimiter:      ',',
-		//LineTerminator: "\n",
-		//})
+	//r := NewDialectReader(strings.NewReader(s), Dialect{
+	//Delimiter:      ',',
+	//LineTerminator: "\n",
+	//})
 
-		//r.readField()
+	//r.readField()
 
-		//line, _ := r.readField()
+	//line, _ := r.readField()
 
-		//fmt.Printf(line)
+	//fmt.Printf(line)
 
-		if !bomFound {
-			t.Error("Unexpected output:", bomFound)
-		}
+	//if !bomFound {
+	//t.Error("Unexpected output:", bomFound)
+	//	}
 
-	}
+	//}
 
 }

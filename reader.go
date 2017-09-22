@@ -133,8 +133,16 @@ func (r *Reader) Read() ([]string, error) {
 	// faster preallocation.
 	record := make([]string, 0, 2)
 
+	counter := 0
+
 	for {
 		field, err := r.readField()
+		if counter == 0 {
+			if strings.Contains(field, "ï»¿") {
+				field = field[3:]
+			}
+
+		}
 		record = append(record, field)
 		if err != nil {
 			return record, err
@@ -154,13 +162,14 @@ func (r *Reader) Read() ([]string, error) {
 		} else {
 			r.skipDelimiter()
 		}
+		counter++
 	}
 
 	// Required by Go 1.0 to compile. Unreachable code.
 	return record, nil
 }
 
-// Make Reader read bytes and check for BOM
+//
 
 func (r *Reader) readField() (string, error) {
 	char, _, err := r.r.ReadRune()
