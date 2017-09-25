@@ -108,11 +108,12 @@ func (r *Reader) Read() ([]string, error) {
 	// faster preallocation.
 	record := make([]string, 0, 2)
 
-	counter := 0
+	firstPass := true
 
 	for {
 		field, err := r.readField()
-		if counter == 0 {
+		if firstPass {
+			firstPass = false
 			if strings.Contains(field, "ï»¿") {
 				field = field[3:]
 			}
@@ -137,7 +138,7 @@ func (r *Reader) Read() ([]string, error) {
 		} else {
 			r.skipDelimiter()
 		}
-		counter++
+
 	}
 
 	// Required by Go 1.0 to compile. Unreachable code.
