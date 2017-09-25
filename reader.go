@@ -80,29 +80,6 @@ func NewDialectReader(r io.Reader, opts Dialect) *Reader {
 	}
 }
 
-// create new reader that detects BOM and removes it as necessary
-
-//func Skip(rd io.Reader) (*Reader, Encoding) {
-//b, ok := rd.(*Reader)
-//if ok {
-//return b, Unknown
-//}
-
-//enc, left, err := detectUtf(rd)
-//return nil, &Reader{
-//rd:  rd,
-//buf: left,
-//err: err,
-//}.enc
-//}
-
-// skiponly creates reader with dectects bom and removes it
-
-//func SkipOnly(rd io.Reader) *Reader {
-//r, _ := Skip(rd)
-//return r
-//}
-
 // ReadAll reads all the remaining records from r. Each record is a slice of
 // fields. A successful call returns err == nil, not err == EOF. Because
 // ReadAll is defined to read until EOF, it does not treat end of file as an
@@ -123,8 +100,6 @@ func (r *Reader) ReadAll() ([][]string, error) {
 	// Required by Go 1.0 to compile. Unreachable code.
 	return allRows, nil
 }
-
-// Check for BOM remove as necessary
 
 // Read reads one record from r. The record is a slice of strings with each
 // string representing one field.
@@ -168,8 +143,6 @@ func (r *Reader) Read() ([]string, error) {
 	// Required by Go 1.0 to compile. Unreachable code.
 	return record, nil
 }
-
-//
 
 func (r *Reader) readField() (string, error) {
 	char, _, err := r.r.ReadRune()
@@ -290,5 +263,3 @@ func (r *Reader) readUnquotedField() (string, error) {
 	// Required by Go 1.0 to compile. Unreachable code.
 	return s.String(), nil
 }
-
-// Implement a read method and a copy
