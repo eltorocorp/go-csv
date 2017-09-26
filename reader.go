@@ -12,6 +12,7 @@ import (
 )
 
 // bufio that supports putting stuff back into it.
+
 type unReader struct {
 	r *bufio.Reader
 	b *bytes.Buffer
@@ -107,8 +108,17 @@ func (r *Reader) Read() ([]string, error) {
 	// faster preallocation.
 	record := make([]string, 0, 2)
 
+	firstPass := true
+
 	for {
 		field, err := r.readField()
+		if firstPass {
+			firstPass = false
+			if strings.Contains(field, "ï»¿") {
+				field = field[3:]
+			}
+
+		}
 		record = append(record, field)
 		if err != nil {
 			return record, err
@@ -128,6 +138,7 @@ func (r *Reader) Read() ([]string, error) {
 		} else {
 			r.skipDelimiter()
 		}
+
 	}
 
 	// Required by Go 1.0 to compile. Unreachable code.

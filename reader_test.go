@@ -5,10 +5,14 @@ package csv
 
 import (
 	"bytes"
+	"encoding/csv"
 	"io"
 	"reflect"
+	"strings"
 	"testing"
 	"testing/quick"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUnReader(t *testing.T) {
@@ -187,4 +191,101 @@ func TestReaderQuick(t *testing.T) {
 	testWriterQuick(t, QuoteAll)
 	testWriterQuick(t, QuoteMinimal)
 	testWriterQuick(t, QuoteNonNumeric)
+}
+
+// Test fot UTF8 Support
+
+func Test_Read_UTF8_ReturnsF(t *testing.T) {
+	text := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n" +
+		"λόγους, οὓςm ἀκούω·, τοὺς μὲν γὰρ, λόγους περὶ τοῦ\n"
+	b := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+	line, _ := b.Read()
+	result := reflect.DeepEqual(line[0], "Οὐχὶ ταὐτὰ")
+	if !result {
+		t.Error("Unexpected output:", line[0])
+	}
+}
+
+func Test_Read_UTF8_Properly_ReadsCharacters(t *testing.T) {
+	// Test data.
+	text := "Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n" +
+		"λόγους, οὓςm ἀκούω·, τοὺς μὲν γὰρ, λόγους περὶ τοῦ\n"
+	// Create reader
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+	// Ignore first two lines.
+	r.Read()
+	r.Read()
+	// Read the third line.
+	line, _ := r.Read()
+	// Check result.
+	result := reflect.DeepEqual(line[2], " τοὺς μὲν γὰρ")
+	// Verify the result is as expected, if not fail.
+	if !result {
+		t.Error("Unexpected output:", line[2])
+	}
+}
+
+func Test_Read_UTF16_ReadsCharacters(t *testing.T) {
+	text := "楆獲ⱴ慌瑳䄬摤敲, 獳ⰱ摁牤獥㉳䌬瑩ⱹ瑓瑡ⱥ楚Ɒ楚㑰䄊䅄\n" +
+		"ⱍ䕗呓㔬㠱, 䥖䱌䝁⁅噁ⱅ䰬协䄠䝎䱅卅䌬ⱁ〹㄰ⰶ㈵㘰䈊䉏奂䠬䱉ⱌㄳ‱\n"
+
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+
+	r.Read()
+	line, _ := r.Read()
+
+	result := reflect.DeepEqual(line[0], "ⱍ䕗呓㔬㠱")
+
+	if !result {
+		t.Error("Unexpected result:", line[1])
+	}
+}
+
+func Test_Read_UTF8_ReadsCharacters(t *testing.T) {
+	//Test data
+	text := "∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i)\n" +
+		"∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β)\n"
+
+	r := NewDialectReader(strings.NewReader(text), Dialect{
+		Delimiter:      ',',
+		LineTerminator: "\n",
+	})
+
+	r.Read()
+
+	line, _ := r.Read()
+
+	result := reflect.DeepEqual(line[1], " α ∧ ¬β = ¬(¬α ∨ β)")
+
+	if !result {
+		t.Error("Unexpected output:", line[1])
+	}
+
+}
+
+func Test_Read_ReturnsCharacters_AfterCheckingBOM(t *testing.T) {
+	s := "ï»¿Οὐχὶ ταὐτὰ, παρίσταταί μοι, γιγνώσκειν ὦ, ἄνδρες ᾿Αθηναῖοι\n" +
+		"ὅταν τ᾿, εἰς τὰ πράγματα ἀποβλέψω, καὶ ὅταν, πρὸς τοὺς\n"
+
+	r := strings.NewReader(s)
+
+	reader := csv.NewReader(r)
+
+	bytes, _ := reader.Read()
+
+	bom := "ï»¿"
+
+	assert.NotEqual(t, bom, bytes[0:3], "first three charactes can never be bom")
+
 }

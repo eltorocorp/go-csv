@@ -5,12 +5,9 @@ package interfaces
 
 import (
 	"bytes"
-
-	"github.com/eltorocorp/go-csv"
-
 	"testing"
 
-	
+	csv "github.com/eltorocorp/go-csv"
 )
 
 func TestReaderInterface(t *testing.T) {
