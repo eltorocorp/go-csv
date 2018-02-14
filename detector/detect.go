@@ -54,7 +54,7 @@ func (d *detector) DetectRowTerminator(reader io.Reader) string {
 func (d *detector) DetectDelimiter(r io.Reader, enclosure byte) []string {
 	b, _ := ioutil.ReadAll(r)
 	if len(b) == 0 {
-		return []string{""}
+		return []string{}
 	}
 	r = bytes.NewReader(b)
 	csvReader := csvd.NewReader(r)

@@ -59,19 +59,23 @@ func TestDetectDelimiter1(t *testing.T) {
 	assert.NoError(t, err)
 	defer file2.Close()
 
+	unreachable := "blah"
 	testCases := []struct {
 		r         io.Reader
 		delimiter string
 	}{
 		{file1, ","},
 		{file2, ","},
-		{strings.NewReader(""), ""},
+		{strings.NewReader(""), unreachable},
 	}
 
 	for _, tc := range testCases {
 		delimiters := detector.DetectDelimiter(tc.r, '"')
 
 		fmt.Println(delimiters)
+		if len(delimiters) == 0 && tc.delimiter == unreachable {
+			return
+		}
 		assert.Equal(t, []string{tc.delimiter}, delimiters)
 	}
 }
