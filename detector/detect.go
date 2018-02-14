@@ -3,6 +3,7 @@ package detector
 import (
 	"bytes"
 	"io"
+	"io/ioutil"
 	"regexp"
 
 	"github.com/jfyne/csvd"
@@ -51,6 +52,11 @@ func (d *detector) DetectRowTerminator(reader io.Reader) string {
 
 // DetectDelimiter finds a slice of delimiter string.
 func (d *detector) DetectDelimiter(r io.Reader, enclosure byte) []string {
+	b, _ := ioutil.ReadAll(r)
+	if len(b) == 0 {
+		return []string{""}
+	}
+	r = bytes.NewReader(b)
 	csvReader := csvd.NewReader(r)
 	delimiter := csvReader.Comma
 	return []string{string(delimiter)}
