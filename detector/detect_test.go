@@ -1,8 +1,11 @@
 package detector
 
 import (
+	"errors"
+	"io"
 	"os"
 	"regexp"
+	"strings"
 	"testing"
 
 	"fmt"
@@ -76,6 +79,32 @@ func TestDetectRowTerminator(t *testing.T) {
 	assert.NoError(t, err)
 	defer file.Close()
 
-	terminator := detector.DetectRowTerminator(file)
-	assert.Equal(t, "\n", terminator)
+	booString := "boo\r\nhere\r\n\beghosts!\r\n"
+	booR := strings.NewReader(booString)
+
+	wooString := "woo\rhere\rbe no pippy!\r"
+	wooR := strings.NewReader(wooString)
+
+	testCases := []struct {
+		r          io.Reader
+		terminator string
+	}{
+		{file, "\n"},
+		{wooR, "\r"},
+		{booR, "\r\n"},
+		{badRead{}, ""},
+	}
+
+	for _, tc := range testCases {
+		terminator := detector.DetectRowTerminator(tc.r)
+		assert.Equal(t, tc.terminator, terminator)
+	}
+
+}
+
+type badRead struct {
+}
+
+func (b badRead) Read(p []byte) (int, error) {
+	return 0, errors.New("woowoowoo")
 }

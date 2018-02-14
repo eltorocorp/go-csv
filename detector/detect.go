@@ -9,7 +9,6 @@ import (
 )
 
 const (
-	sampleLines             = 15
 	nonDelimiterRegexString = `[[:alnum:]\n\r]`
 )
 
@@ -37,9 +36,6 @@ func (d *detector) DetectRowTerminator(reader io.Reader) string {
 	buf := make([]byte, 128*KB)
 	_, err := reader.Read(buf)
 	if err != nil {
-		if err == io.EOF {
-			return ""
-		}
 		return ""
 	}
 
