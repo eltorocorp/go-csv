@@ -51,25 +51,29 @@ func TestIsPotentialDelimiter(t *testing.T) {
 func TestDetectDelimiter1(t *testing.T) {
 	detector := New()
 
-	file, err := os.OpenFile("./Fixtures/test1.csv", os.O_RDONLY, os.ModePerm)
+	file1, err := os.OpenFile("./Fixtures/test1.csv", os.O_RDONLY, os.ModePerm)
 	assert.NoError(t, err)
-	defer file.Close()
+	defer file1.Close()
 
-	delimiters := detector.DetectDelimiter(file, '"')
-	fmt.Println(delimiters)
-	assert.Equal(t, []string{","}, delimiters)
-}
-
-func TestDetectDelimiter2(t *testing.T) {
-	detector := New()
-
-	file, err := os.OpenFile("./Fixtures/test2.csv", os.O_RDONLY, os.ModePerm)
+	file2, err := os.OpenFile("./Fixtures/test2.csv", os.O_RDONLY, os.ModePerm)
 	assert.NoError(t, err)
-	defer file.Close()
+	defer file2.Close()
 
-	delimiters := detector.DetectDelimiter(file, '"')
-	fmt.Println(delimiters)
-	assert.Equal(t, []string{","}, delimiters)
+	testCases := []struct {
+		r         io.Reader
+		delimiter string
+	}{
+		{file1, ","},
+		{file2, ","},
+		{strings.NewReader(""), ""},
+	}
+
+	for _, tc := range testCases {
+		delimiters := detector.DetectDelimiter(tc.r, '"')
+
+		fmt.Println(delimiters)
+		assert.Equal(t, []string{tc.delimiter}, delimiters)
+	}
 }
 
 func TestDetectRowTerminator(t *testing.T) {
@@ -85,6 +89,8 @@ func TestDetectRowTerminator(t *testing.T) {
 	wooString := "woo\rhere\rbe no pippy!\r"
 	wooR := strings.NewReader(wooString)
 
+	emptyR := strings.NewReader("")
+
 	testCases := []struct {
 		r          io.Reader
 		terminator string
@@ -93,6 +99,7 @@ func TestDetectRowTerminator(t *testing.T) {
 		{wooR, "\r"},
 		{booR, "\r\n"},
 		{badRead{}, ""},
+		{emptyR, ""},
 	}
 
 	for _, tc := range testCases {
