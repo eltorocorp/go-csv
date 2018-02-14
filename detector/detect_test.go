@@ -45,16 +45,6 @@ func TestIsPotentialDelimiter(t *testing.T) {
 	}
 }
 
-func TestFrequencyTable(t *testing.T) {
-	ft := createFrequencyTable()
-
-	ft.increment(',', 1).increment(',', 2).increment('|', 3).increment('|', 3)
-
-	assert.Equal(t, 1, ft[','][1])
-	assert.Equal(t, 1, ft[','][2])
-	assert.Equal(t, 2, ft['|'][3])
-}
-
 func TestDetectDelimiter1(t *testing.T) {
 	detector := New()
 
@@ -88,63 +78,4 @@ func TestDetectRowTerminator(t *testing.T) {
 
 	terminator := detector.DetectRowTerminator(file)
 	assert.Equal(t, "\n", terminator)
-}
-
-func TestDetectorSample(t *testing.T) {
-	detector := New().(*detector)
-
-	file, err := os.OpenFile("./Fixtures/test1.csv", os.O_RDONLY, os.ModePerm)
-	assert.NoError(t, err)
-	defer file.Close()
-
-	actual, line := detector.sample(file, 15, '"')
-	expected := frequencyTable{
-		'.': map[int]int{
-			2: 1,
-			3: 1,
-			4: 1,
-			5: 1,
-		},
-		' ': map[int]int{
-			5: 1,
-		},
-		',': map[int]int{
-			1: 4,
-			2: 4,
-			3: 4,
-			4: 4,
-			5: 4,
-		},
-	}
-
-	for k, v := range expected {
-		assert.Equal(t, v, actual[k])
-	}
-	assert.Equal(t, 5, line)
-}
-
-func TestDetectAnalyze(t *testing.T) {
-	ft := frequencyTable{
-		'.': map[int]int{
-			2: 1,
-			3: 1,
-			4: 1,
-			5: 1,
-		},
-		' ': map[int]int{
-			5: 1,
-		},
-		',': map[int]int{
-			1: 4,
-			2: 4,
-			3: 4,
-			4: 4,
-			5: 4,
-		},
-	}
-
-	detector := &detector{}
-	candidates := detector.analyze(ft, 5)
-
-	assert.Equal(t, []byte{','}, candidates)
 }
